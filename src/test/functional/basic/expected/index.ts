@@ -1,3 +1,3 @@
-export * from "./document"
-export * from "./presentation"
-export * from "./spreadsheet"
+export * from "./Document"
+export * from "./Presentation"
+export * from "./Spreadsheet"

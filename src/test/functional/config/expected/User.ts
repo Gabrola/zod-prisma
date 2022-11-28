@@ -1,4 +1,4 @@
-import * as z from "zod"
+import { z } from "zod"
 import { CompletePost, postSchema } from "./index"
 
 export const _userSchema = z.object({

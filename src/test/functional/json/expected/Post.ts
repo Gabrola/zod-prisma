@@ -1,4 +1,4 @@
-import * as z from "zod"
+import { z } from "zod"
 import { CompleteUser, RelatedUserModel } from "./index"
 
 export const PostModel = z.object({
@@ -7,7 +7,7 @@ export const PostModel = z.object({
 })
 
 export interface CompletePost extends z.infer<typeof PostModel> {
-  author?: CompleteUser | null
+  author: CompleteUser
 }
 
 /**
@@ -16,5 +16,5 @@ export interface CompletePost extends z.infer<typeof PostModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedPostModel: z.ZodSchema<CompletePost> = z.lazy(() => PostModel.extend({
-  author: RelatedUserModel.nullish(),
+  author: RelatedUserModel,
 }))

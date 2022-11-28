@@ -68,7 +68,7 @@ const ftForDir = (dir: string) => async () => {
 	await Promise.all(
 		dmmf.datamodel.models.map(async (model) => {
 			const sourceFile = project.createSourceFile(
-				`${actualDir}/${model.name.toLowerCase()}.ts`,
+				`${actualDir}/${model.name}.ts`,
 				{},
 				{ overwrite: true }
 			)
@@ -83,11 +83,11 @@ const ftForDir = (dir: string) => async () => {
 
 			await sourceFile.save()
 			const actualContents = await readFile(
-				`${actualDir}/${model.name.toLowerCase()}.ts`,
+				`${actualDir}/${model.name}.ts`,
 				'utf-8'
 			)
 
-			const expectedFile = path.resolve(expectedDir, `${model.name.toLowerCase()}.ts`)
+			const expectedFile = path.resolve(expectedDir, `${model.name}.ts`)
 			const expectedContents = await readFile(
 				path.resolve(expectedDir, expectedFile),
 				'utf-8'
