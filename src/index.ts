@@ -70,7 +70,11 @@ generatorHandler({
 
 		if (config.enumFile) {
 			const enums = options.dmmf.datamodel.enums
-			const enumFile = project.createSourceFile(`${outputPath}/${config.enumFile}.ts`)
+			const enumFile = project.createSourceFile(
+				`${outputPath}/${config.enumFile}.ts`,
+				{},
+				{ overwrite: true }
+			)
 			populateEnumFile(enums, enumFile)
 		}
 
