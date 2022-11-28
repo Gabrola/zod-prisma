@@ -1,5 +1,5 @@
 {
-	"name": "zod-prisma",
+	"name": "@manokii/zod-prisma",
 	"version": "0.5.4",
 	"description": "A Prisma generator that creates Zod schemas for all of your models",
 	"license": "MIT",
