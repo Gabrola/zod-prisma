@@ -150,7 +150,7 @@ npm install -g yarn
       prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
 
-    		enumFile 							   = "enums" // will generate enum files instead of referencing generated ones from the prisma client
+      enumFile                 = "enums" // will generate enum file instead of referencing generated ones from the prisma client
     }
     ```
 
