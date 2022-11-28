@@ -1,5 +1,5 @@
-import path from 'path'
 import { DMMF } from '@prisma/generator-helper'
+import path from 'path'
 import {
 	ImportDeclarationStructure,
 	SourceFile,
@@ -7,9 +7,9 @@ import {
 	VariableDeclarationKind,
 } from 'ts-morph'
 import { Config, PrismaOptions } from './config'
-import { dotSlash, needsRelatedModel, useModelNames, writeArray } from './util'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
+import { dotSlash, needsRelatedModel, useModelNames, writeArray } from './util'
 
 export const writeImportsForModel = (
 	model: DMMF.Model,
@@ -52,7 +52,7 @@ export const writeImportsForModel = (
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
-			moduleSpecifier: dotSlash(relativePath),
+			moduleSpecifier: dotSlash(config.enumFile || relativePath),
 			namedImports: enumFields.map((f) => f.type),
 		})
 	}
@@ -223,6 +223,21 @@ export const generateRelatedSchemaForModel = (
 				},
 			},
 		],
+	})
+}
+
+export const populateEnumFile = (enums: DMMF.DatamodelEnum[], sourceFile: SourceFile) => {
+	enums.forEach((enumModel) => {
+		sourceFile.addEnums([
+			{
+				name: enumModel.name,
+				isExported: true,
+				members: enumModel.values.map((value) => ({
+					name: value.name,
+					value: value.dbName || undefined,
+				})),
+			},
+		])
 	})
 }
 

@@ -2,10 +2,10 @@
 import { version } from '../package.json'
 
 import { generatorHandler } from '@prisma/generator-helper'
+import { Project } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from './config'
-import { populateModelFile, generateBarrelFile } from './generator'
-import { Project } from 'ts-morph'
+import { generateBarrelFile, populateEnumFile, populateModelFile } from './generator'
 
 generatorHandler({
 	onManifest() {
@@ -55,11 +55,10 @@ generatorHandler({
 
 		models.forEach((model) => {
 			const sourceFile = project.createSourceFile(
-				`${outputPath}/${model.name.toLowerCase()}.ts`,
+				`${outputPath}/${model.name}.ts`,
 				{},
 				{ overwrite: true }
 			)
-
 			populateModelFile(model, sourceFile, config, prismaOptions)
 
 			sourceFile.formatText({
@@ -68,6 +67,12 @@ generatorHandler({
 				semicolons: SemicolonPreference.Remove,
 			})
 		})
+
+		if (config.enumFile) {
+			const enums = options.dmmf.datamodel.enums
+			const enumFile = project.createSourceFile(`${outputPath}/${config.enumFile}.ts`)
+			populateEnumFile(enums, enumFile)
+		}
 
 		return project.save()
 	},

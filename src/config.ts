@@ -9,6 +9,8 @@ export const configSchema = z.object({
 	useDecimalJs: configBoolean.default('false'),
 	imports: z.string().optional(),
 	prismaJsonNullability: configBoolean.default('true'),
+	fileNameCase: z.enum(['PascalCase', 'camelCase', 'snake_case']).default('PascalCase'),
+	enumFile: z.string().optional(),
 })
 
 export type Config = z.infer<typeof configSchema>
