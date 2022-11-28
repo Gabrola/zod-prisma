@@ -1,4 +1,4 @@
-import * as z from "zod"
+import { z } from "zod"
 import { CompleteSpreadsheet, RelatedSpreadsheetModel } from "./index"
 
 export const PresentationModel = z.object({

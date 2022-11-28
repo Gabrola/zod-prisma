@@ -22,7 +22,7 @@ describe('Regression Tests', () => {
 				USER
 				ADMIN
 			}
-			
+
 			model User {
 				id			String @id
 				type		UserType
@@ -35,7 +35,7 @@ describe('Regression Tests', () => {
 		writeImportsForModel(model, testFile, config, prismaOptions)
 
 		expect(testFile.print()).toBe(
-			'import * as z from "zod";\nimport { UserType } from "@prisma/client";\n'
+			'import { z } from "zod";\nimport { UserType } from "@prisma/client";\n'
 		)
 	})
 })

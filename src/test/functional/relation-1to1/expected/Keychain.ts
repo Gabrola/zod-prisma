@@ -1,4 +1,4 @@
-import * as z from "zod"
+import { z } from "zod"
 import { CompleteUser, RelatedUserModel } from "./index"
 
 export const KeychainModel = z.object({

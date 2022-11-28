@@ -21,7 +21,7 @@ export const writeImportsForModel = (
 	const importList: ImportDeclarationStructure[] = [
 		{
 			kind: StructureKind.ImportDeclaration,
-			namespaceImport: 'z',
+			namedImports: ['z'],
 			moduleSpecifier: 'zod',
 		},
 	]
@@ -234,7 +234,7 @@ export const populateEnumFile = (enums: DMMF.DatamodelEnum[], sourceFile: Source
 				isExported: true,
 				members: enumModel.values.map((value) => ({
 					name: value.name,
-					value: value.dbName || undefined,
+					value: value.dbName || value.name,
 				})),
 			},
 		])
@@ -257,7 +257,7 @@ export const populateModelFile = (
 export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
 	models.forEach((model) =>
 		indexFile.addExportDeclaration({
-			moduleSpecifier: `./${model.name.toLowerCase()}`,
+			moduleSpecifier: `./${model.name}`,
 		})
 	)
 }
