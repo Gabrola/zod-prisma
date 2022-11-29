@@ -10,6 +10,11 @@
 *** CarterGrimmeisen, zod-prisma, twitter_handle, Carter.Grimmeisen@uah.edu, Zod Prisma, A custom prisma generator that creates Zod schemas from your Prisma model.
 -->
 
+## This is AcadArena's fork of zod-prisma
+### Changes
+- added enumFile config
+- uses ModelName as file name
+
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
