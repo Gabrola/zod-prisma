@@ -254,10 +254,20 @@ export const populateModelFile = (
 		generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions)
 }
 
-export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
+export const generateBarrelFile = (
+	models: DMMF.Model[],
+	indexFile: SourceFile,
+	enumFile?: string | null
+) => {
 	models.forEach((model) =>
 		indexFile.addExportDeclaration({
 			moduleSpecifier: `./${model.name}`,
 		})
 	)
+
+	if (enumFile) {
+		indexFile.addExportDeclaration({
+			moduleSpecifier: `./${enumFile}`,
+		})
+	}
 }
