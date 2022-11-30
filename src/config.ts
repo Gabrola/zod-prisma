@@ -11,6 +11,8 @@ export const configSchema = z.object({
 	prismaJsonNullability: configBoolean.default('true'),
 	fileNameCase: z.enum(['PascalCase', 'camelCase', 'snake_case']).default('PascalCase'),
 	enumFile: z.string().optional(),
+	indentSize: z.number().default(2),
+	indentType: z.enum(['tab', 'space']).default('space'),
 })
 
 export type Config = z.infer<typeof configSchema>

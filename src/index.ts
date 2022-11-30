@@ -48,8 +48,8 @@ generatorHandler({
 		generateBarrelFile(models, indexFile, config.enumFile)
 
 		indexFile.formatText({
-			indentSize: 2,
-			convertTabsToSpaces: true,
+			indentSize: config.indentSize,
+			convertTabsToSpaces: config.indentType === 'space',
 			semicolons: SemicolonPreference.Remove,
 		})
 
@@ -62,8 +62,8 @@ generatorHandler({
 			populateModelFile(model, sourceFile, config, prismaOptions)
 
 			sourceFile.formatText({
-				indentSize: 2,
-				convertTabsToSpaces: true,
+				indentSize: config.indentSize,
+				convertTabsToSpaces: config.indentType === 'space',
 				semicolons: SemicolonPreference.Remove,
 			})
 		})
@@ -76,6 +76,11 @@ generatorHandler({
 				{ overwrite: true }
 			)
 			populateEnumFile(enums, enumFile)
+			enumFile.formatText({
+				indentSize: config.indentSize,
+				convertTabsToSpaces: config.indentType === 'space',
+				semicolons: SemicolonPreference.Remove,
+			})
 		}
 
 		return project.save()
