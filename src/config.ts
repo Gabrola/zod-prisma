@@ -1,3 +1,4 @@
+import { SemicolonPreference } from 'typescript'
 import { z } from 'zod'
 
 const configBoolean = z.enum(['true', 'false']).transform((arg) => JSON.parse(arg))
@@ -13,6 +14,9 @@ export const configSchema = z.object({
 	enumFile: z.string().optional(),
 	indentSize: z.number().default(2),
 	indentType: z.enum(['tab', 'space']).default('space'),
+	singleQuote: configBoolean.default('false'),
+	semicolon: z.nativeEnum(SemicolonPreference).default(SemicolonPreference.Remove),
+	trailingCommas: configBoolean.default('true'),
 })
 
 export type Config = z.infer<typeof configSchema>

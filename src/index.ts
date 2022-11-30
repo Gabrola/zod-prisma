@@ -2,8 +2,7 @@
 import { version } from '../package.json'
 
 import { generatorHandler } from '@prisma/generator-helper'
-import { Project } from 'ts-morph'
-import { SemicolonPreference } from 'typescript'
+import { Project, QuoteKind } from 'ts-morph'
 import { configSchema, PrismaOptions } from './config'
 import { generateBarrelFile, populateEnumFile, populateModelFile } from './generator'
 
@@ -16,8 +15,6 @@ generatorHandler({
 		}
 	},
 	onGenerate(options) {
-		const project = new Project()
-
 		const models = options.dmmf.datamodel.models
 
 		const { schemaPath } = options
@@ -39,6 +36,13 @@ generatorHandler({
 			schemaPath,
 		}
 
+		const project = new Project({
+			manipulationSettings: {
+				quoteKind: config.singleQuote ? QuoteKind.Single : QuoteKind.Double,
+				useTrailingCommas: config.trailingCommas,
+			},
+		})
+
 		const indexFile = project.createSourceFile(
 			`${outputPath}/index.ts`,
 			{},
@@ -50,7 +54,7 @@ generatorHandler({
 		indexFile.formatText({
 			indentSize: config.indentSize,
 			convertTabsToSpaces: config.indentType === 'space',
-			semicolons: SemicolonPreference.Remove,
+			semicolons: config.semicolon,
 		})
 
 		models.forEach((model) => {
@@ -64,7 +68,7 @@ generatorHandler({
 			sourceFile.formatText({
 				indentSize: config.indentSize,
 				convertTabsToSpaces: config.indentType === 'space',
-				semicolons: SemicolonPreference.Remove,
+				semicolons: config.semicolon,
 			})
 		})
 
@@ -79,7 +83,7 @@ generatorHandler({
 			enumFile.formatText({
 				indentSize: config.indentSize,
 				convertTabsToSpaces: config.indentType === 'space',
-				semicolons: SemicolonPreference.Remove,
+				semicolons: config.semicolon,
 			})
 		}
 
