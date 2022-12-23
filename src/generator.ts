@@ -181,8 +181,8 @@ export const generateRelatedSchemaForModel = (
 		})),
 	})
 
-	sourceFile.addStatements((writer) =>
-		writeArray(writer, [
+	sourceFile.addStatements((writer) => {
+		const comments = [
 			'',
 			'/**',
 			` * ${relatedModelName(
@@ -191,8 +191,11 @@ export const generateRelatedSchemaForModel = (
 			' *',
 			' * NOTE: Lazy required in case of potential circular dependencies within schema',
 			' */',
-		])
-	)
+		]
+
+		if (config.ignoreRelationTypes) comments.push('// @ts-ignore')
+		return writeArray(writer, comments)
+	})
 
 	sourceFile.addVariableStatement({
 		declarationKind: VariableDeclarationKind.Const,
