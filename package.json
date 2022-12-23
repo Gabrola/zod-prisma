@@ -71,7 +71,7 @@
 		"prisma": "4.6.1",
 		"tslib": "2.4.1",
 		"typescript": "4.9.3",
-		"zod": "3.19.1"
+		"zod": "3.20.2"
 	},
 	"peerDependencies": {
 		"decimal.js": "^10.0.0",
