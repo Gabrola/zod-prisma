@@ -38,6 +38,7 @@
     "prepublish": "dts build --target node --format cjs --rollupTypes",
     "start": "dts watch",
     "test": "dts test --maxWorkers=4 --verbose",
+    "test:ci": "dts test --maxWorkers=2 --verbose --ci",
     "release": "npx np"
   },
   "prettier": {
