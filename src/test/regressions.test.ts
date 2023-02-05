@@ -1,24 +1,24 @@
-import path from 'path'
-import { configSchema, PrismaOptions } from '../config'
-import { writeImportsForModel } from '../generator'
-import { getDMMF } from '@prisma/sdk'
-import { Project } from 'ts-morph'
+import path from 'path';
+import { configSchema, PrismaOptions } from '../config';
+import { writeImportsForModel } from '../generator';
+import { getDMMF } from '@prisma/internals';
+import { Project } from 'ts-morph';
 
 describe('Regression Tests', () => {
-	test('#92', async () => {
-		const config = configSchema.parse({})
-		const prismaOptions: PrismaOptions = {
-			clientPath: path.resolve(__dirname, '../node_modules/@prisma/client'),
-			outputPath: path.resolve(__dirname, './prisma/zod'),
-			schemaPath: path.resolve(__dirname, './prisma/schema.prisma'),
-		}
+  test('#92', async () => {
+    const config = configSchema.parse({});
+    const prismaOptions: PrismaOptions = {
+      clientPath: path.resolve(__dirname, '../node_modules/@prisma/client'),
+      outputPath: path.resolve(__dirname, './prisma/zod'),
+      schemaPath: path.resolve(__dirname, './prisma/schema.prisma'),
+    };
 
-		const {
-			datamodel: {
-				models: [model],
-			},
-		} = await getDMMF({
-			datamodel: `enum UserType {
+    const {
+      datamodel: {
+        models: [model],
+      },
+    } = await getDMMF({
+      datamodel: `enum UserType {
 				USER
 				ADMIN
 			}
@@ -27,15 +27,15 @@ describe('Regression Tests', () => {
 				id			String @id
 				type		UserType
 			}`,
-		})
+    });
 
-		const project = new Project()
-		const testFile = project.createSourceFile('test.ts')
+    const project = new Project();
+    const testFile = project.createSourceFile('test.ts');
 
-		writeImportsForModel(model, testFile, config, prismaOptions)
+    writeImportsForModel(model, testFile, config, prismaOptions);
 
-		expect(testFile.print()).toBe(
-			'import { z } from "zod";\nimport { UserType } from "@prisma/client";\n'
-		)
-	})
-})
+    expect(testFile.print()).toBe(
+      'import { z } from "zod";\nimport { UserType } from "@prisma/client";\n'
+    );
+  });
+});

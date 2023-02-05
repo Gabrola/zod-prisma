@@ -14,6 +14,7 @@ generator client {
 generator zod {
   provider = "zod-prisma"
   output   = "../actual/"
+  enumFile = "enums"
 }
 
 model Document {
@@ -21,6 +22,7 @@ model Document {
   filename String @unique
   author   String
   contents String
+  role     Role
 
   created DateTime @default(now())
   updated DateTime @default(now())
@@ -44,4 +46,9 @@ model Spreadsheet {
 
   created DateTime @default(now())
   updated DateTime @default(now())
+}
+
+enum Role {
+  Admin
+  User
 }

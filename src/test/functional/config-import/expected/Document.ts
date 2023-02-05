@@ -1,5 +1,5 @@
-import { z } from "zod"
-import * as imports from "../prisma/zod-utils"
+import { z } from 'zod';
+import * as imports from '../prisma/zod-utils';
 
 export const DocumentModel = z.object({
   id: z.string(),
@@ -9,4 +9,4 @@ export const DocumentModel = z.object({
   size: imports.decimalSchema,
   created: z.date(),
   updated: z.date(),
-})
+});

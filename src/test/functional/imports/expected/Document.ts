@@ -1,5 +1,5 @@
-import { z } from "zod"
-import { Status } from "../prisma/.client"
+import { z } from 'zod';
+import { Status } from '../prisma/.client';
 
 export const DocumentModel = z.object({
   id: z.string(),
@@ -9,4 +9,4 @@ export const DocumentModel = z.object({
   status: z.nativeEnum(Status),
   created: z.date(),
   updated: z.date(),
-})
+});

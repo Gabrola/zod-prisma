@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod';
 
 export const DocumentModel = z.object({
   id: z.string(),
@@ -7,4 +7,4 @@ export const DocumentModel = z.object({
   contents: z.string(),
   created: z.date(),
   updated: z.date(),
-})
+});

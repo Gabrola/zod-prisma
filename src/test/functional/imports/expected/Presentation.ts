@@ -1,5 +1,5 @@
-import { z } from "zod"
-import { CompleteSpreadsheet, RelatedSpreadsheetModel } from "./index"
+import { z } from 'zod';
+import { CompleteSpreadsheet, RelatedSpreadsheetModel } from './index';
 
 export const PresentationModel = z.object({
   id: z.string(),
@@ -8,10 +8,10 @@ export const PresentationModel = z.object({
   contents: z.string().array(),
   created: z.date(),
   updated: z.date(),
-})
+});
 
 export interface CompletePresentation extends z.infer<typeof PresentationModel> {
-  spreadsheets: CompleteSpreadsheet[]
+  spreadsheets: CompleteSpreadsheet[];
 }
 
 /**
@@ -19,6 +19,8 @@ export interface CompletePresentation extends z.infer<typeof PresentationModel> 
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedPresentationModel: z.ZodSchema<CompletePresentation> = z.lazy(() => PresentationModel.extend({
-  spreadsheets: RelatedSpreadsheetModel.array(),
-}))
+export const RelatedPresentationModel: z.ZodSchema<CompletePresentation> = z.lazy(() =>
+  PresentationModel.extend({
+    spreadsheets: RelatedSpreadsheetModel.array(),
+  })
+);
