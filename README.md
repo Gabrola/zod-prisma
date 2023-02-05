@@ -68,10 +68,12 @@
 
 ## About The Project
 
-I got tired of having to manually create Zod schemas for my Prisma models and of updating them everytime I made schema changes.
-This provides a way of automatically generating them with your prisma
+This is a fork of [AcadArena/zod-prisma](https://github.com/AcadArena/zod-prisma) which is a fork of [CarterGrimmeisen/zod-prisma](https://github.com/CarterGrimmeisen/zod-prisma)
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+The difference to AcadArena's fork is that enums are generated as readonly objects rather than TS enums to allow literal strings and other overlapping enum values to be compatible with the zod inferred types.
+[TypeScript enums suck](https://www.youtube.com/watch?v=0fTdCSH_QEU).
+
+Also, there is now the option to specify different zod schemas for the DateTime type. This is useful if you are converting to/from JSON where JS Date objects are serialized into ISO strings.
 
 ### Built With
 
@@ -87,24 +89,29 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This project utilizes yarn and if you plan on contributing, you should too.
+This project utilizes pnpm and if you plan on contributing, you should too.
 
 ```sh
-npm install -g yarn
+npm install -g pnpm
 ```
 
 ### Installation
 
-0.  **Ensure your tsconfig.json enables the compiler's strict mode.**
+1.  **Ensure your tsconfig.json enables the compiler's strict mode.**
     **Zod requires it and so do we, you will experience TS errors without strict mode enabled**
 
-1.  Add zod-prisma as a dev dependency
+2.  Add zod-prisma as a dev dependency
 
     ```sh
+    #npm
+    npm install -D zod-prisma
+    #yarn
     yarn add -D zod-prisma
+    #pnpm
+    pnpm add -D zod-prisma
     ```
 
-2.  Add the zod-prisma generator to your schema.prisma
+3.  Add the zod-prisma generator to your schema.prisma
 
     ```prisma
     generator zod {
@@ -130,11 +137,16 @@ npm install -g yarn
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
 
       enumFile                 = "enums" // will generate enum file instead of referencing generated ones from the prisma client
+    
+      // date      -  z.date()
+      // union     -  z.union([z.date(), z.string().datetime()])
+      // transform -  z.date().transform((v) => v.toISOString()).pipe(z.string().datetime())
+      dateTimeSchema           = "date" // (default) the type to use for DateTime fields
     }
     ```
 
-3.  Run `npx prisma generate` or `yarn prisma generate` to generate your zod schemas
-4.  Import the generated schemas form your selected output location
+4.  Run `npx prisma generate`, `yarn prisma generate`, or `pnpm prisma generate` to generate your zod schemas
+5.  Import the generated schemas form your selected output location
 
 <!-- USAGE EXAMPLES -->
 
@@ -276,14 +288,6 @@ Contributions are what make the open source community such an amazing place to b
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-<!-- CONTACT -->
-
-## Contact
-
-Carter Grimmeisen - Carter.Grimmeisen@uah.edu
-
-Project Link: [https://github.com/Gabrola/zod-prisma](https://github.com/Gabrola/zod-prisma)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

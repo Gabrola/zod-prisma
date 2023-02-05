@@ -12,8 +12,9 @@ generator client {
 }
 
 generator zod {
-  provider = "zod-prisma"
-  output   = "../actual/"
+  provider       = "zod-prisma"
+  output         = "../actual/"
+  dateTimeSchema = "transform"
 }
 
 enum Status {

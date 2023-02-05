@@ -18,6 +18,7 @@ export const configSchema = z.object({
   semicolon: z.nativeEnum(SemicolonPreference).default(SemicolonPreference.Insert),
   trailingCommas: configBoolean.default('true'),
   ignoreRelationTypes: configBoolean.default('false').optional(),
+  dateTimeSchema: z.enum(['date', 'union', 'transform']).default('date'),
 });
 
 export type Config = z.infer<typeof configSchema>;

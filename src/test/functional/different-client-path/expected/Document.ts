@@ -5,12 +5,6 @@ export const DocumentModel = z.object({
   filename: z.string(),
   author: z.string(),
   contents: z.string(),
-  created: z
-    .date()
-    .transform((v) => v.toISOString())
-    .pipe(z.string().datetime()),
-  updated: z
-    .date()
-    .transform((v) => v.toISOString())
-    .pipe(z.string().datetime()),
+  created: z.union([z.date(), z.string().datetime()]),
+  updated: z.union([z.date(), z.string().datetime()]),
 });

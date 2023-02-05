@@ -9,9 +9,10 @@ generator client {
 }
 
 generator zod {
-  provider = "zod-prisma"
-  output   = "../actual/"
-  imports  = "./zod-utils"
+  provider       = "zod-prisma"
+  output         = "../actual/"
+  imports        = "./zod-utils"
+  dateTimeSchema = "transform"
 }
 
 model Document {

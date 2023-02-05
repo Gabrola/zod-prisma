@@ -147,7 +147,7 @@ export const generateSchemaForModel = (
                 .forEach((field) => {
                   writeArray(writer, getJSDocs(field.documentation));
                   writer
-                    .write(`${field.name}: ${getZodConstructor(field)}`)
+                    .write(`${field.name}: ${getZodConstructor(field, config.dateTimeSchema)}`)
                     .write(',')
                     .newLine();
                 });
@@ -222,7 +222,13 @@ export const generateRelatedSchemaForModel = (
                 writeArray(writer, getJSDocs(field.documentation));
 
                 writer
-                  .write(`${field.name}: ${getZodConstructor(field, relatedModelName)}`)
+                  .write(
+                    `${field.name}: ${getZodConstructor(
+                      field,
+                      config.dateTimeSchema,
+                      relatedModelName
+                    )}`
+                  )
                   .write(',')
                   .newLine();
               });

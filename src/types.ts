@@ -1,8 +1,11 @@
 import type { DMMF } from '@prisma/generator-helper';
+import { z } from 'zod';
 import { computeCustomSchema, computeModifiers } from './docs';
+import { configSchema } from './config';
 
 export const getZodConstructor = (
   field: DMMF.Field,
+  dateType: z.infer<typeof configSchema.shape.dateTimeSchema>,
   getRelatedModelName = (name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg) =>
     name.toString()
 ) => {
@@ -20,9 +23,20 @@ export const getZodConstructor = (
       case 'BigInt':
         zodType = 'z.bigint()';
         break;
-      case 'DateTime':
-        zodType = 'z.date().transform((v) => v.toISOString()).pipe(z.string().datetime())';
+      case 'DateTime': {
+        switch (dateType) {
+          case 'date':
+            zodType = 'z.date()';
+            break;
+          case 'union':
+            zodType = 'z.union([z.date(), z.string().datetime()])';
+            break;
+          case 'transform':
+            zodType = 'z.date().transform((v) => v.toISOString()).pipe(z.string().datetime())';
+            break;
+        }
         break;
+      }
       case 'Float':
         zodType = 'z.number()';
         break;

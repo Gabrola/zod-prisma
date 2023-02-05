@@ -13,12 +13,6 @@ export const SpreadsheetModel = z.object({
   filename: z.string(),
   author: z.string(),
   contents: jsonSchema,
-  created: z
-    .date()
-    .transform((v) => v.toISOString())
-    .pipe(z.string().datetime()),
-  updated: z
-    .date()
-    .transform((v) => v.toISOString())
-    .pipe(z.string().datetime()),
+  created: z.date(),
+  updated: z.date(),
 });

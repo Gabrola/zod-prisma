@@ -7,12 +7,6 @@ export const DocumentModel = z.object({
   author: z.string(),
   contents: z.string(),
   role: z.nativeEnum(Role),
-  created: z
-    .date()
-    .transform((v) => v.toISOString())
-    .pipe(z.string().datetime()),
-  updated: z
-    .date()
-    .transform((v) => v.toISOString())
-    .pipe(z.string().datetime()),
+  created: z.date(),
+  updated: z.date(),
 });
