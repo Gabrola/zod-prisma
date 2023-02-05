@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { CompletePresentation, RelatedPresentationModel } from './index';
+import {
+  CompletePresentationInput,
+  CompletePresentationOutput,
+  RelatedPresentationModel,
+} from './index';
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string;
@@ -14,12 +18,22 @@ export const SpreadsheetModel = z.object({
   filename: z.string(),
   author: z.string(),
   contents: jsonSchema,
-  created: z.date(),
-  updated: z.date(),
+  created: z
+    .date()
+    .transform((v) => v.toISOString())
+    .pipe(z.string().datetime()),
+  updated: z
+    .date()
+    .transform((v) => v.toISOString())
+    .pipe(z.string().datetime()),
 });
 
-export interface CompleteSpreadsheet extends z.infer<typeof SpreadsheetModel> {
-  presentations: CompletePresentation[];
+export interface CompleteSpreadsheetInput extends z.input<typeof SpreadsheetModel> {
+  presentations: CompletePresentationInput[];
+}
+
+export interface CompleteSpreadsheetOutput extends z.infer<typeof SpreadsheetModel> {
+  presentations: CompletePresentationOutput[];
 }
 
 /**
@@ -27,7 +41,11 @@ export interface CompleteSpreadsheet extends z.infer<typeof SpreadsheetModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedSpreadsheetModel: z.ZodSchema<CompleteSpreadsheet> = z.lazy(() =>
+export const RelatedSpreadsheetModel: z.ZodSchema<
+  CompleteSpreadsheetOutput,
+  z.ZodTypeDef,
+  CompleteSpreadsheetInput
+> = z.lazy(() =>
   SpreadsheetModel.extend({
     presentations: RelatedPresentationModel.array(),
   })

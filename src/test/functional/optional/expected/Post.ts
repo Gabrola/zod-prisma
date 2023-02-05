@@ -1,13 +1,17 @@
 import { z } from 'zod';
-import { CompleteUser, RelatedUserModel } from './index';
+import { CompleteUserInput, CompleteUserOutput, RelatedUserModel } from './index';
 
 export const PostModel = z.object({
   id: z.number().int(),
   authorId: z.number().int(),
 });
 
-export interface CompletePost extends z.infer<typeof PostModel> {
-  author?: CompleteUser | null;
+export interface CompletePostInput extends z.input<typeof PostModel> {
+  author?: CompleteUserInput | null;
+}
+
+export interface CompletePostOutput extends z.infer<typeof PostModel> {
+  author?: CompleteUserOutput | null;
 }
 
 /**
@@ -15,8 +19,9 @@ export interface CompletePost extends z.infer<typeof PostModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedPostModel: z.ZodSchema<CompletePost> = z.lazy(() =>
-  PostModel.extend({
-    author: RelatedUserModel.nullish(),
-  })
-);
+export const RelatedPostModel: z.ZodSchema<CompletePostOutput, z.ZodTypeDef, CompletePostInput> =
+  z.lazy(() =>
+    PostModel.extend({
+      author: RelatedUserModel.nullish(),
+    })
+  );

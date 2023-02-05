@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CompletePost, postSchema } from './index';
+import { CompletePostInput, CompletePostOutput, postSchema } from './index';
 
 export const _userSchema = z.object({
   id: z.string(),
@@ -7,8 +7,12 @@ export const _userSchema = z.object({
   email: z.string(),
 });
 
-export interface CompleteUser extends z.infer<typeof _userSchema> {
-  posts: CompletePost[];
+export interface CompleteUserInput extends z.input<typeof _userSchema> {
+  posts: CompletePostInput[];
+}
+
+export interface CompleteUserOutput extends z.infer<typeof _userSchema> {
+  posts: CompletePostOutput[];
 }
 
 /**
@@ -16,8 +20,9 @@ export interface CompleteUser extends z.infer<typeof _userSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const userSchema: z.ZodSchema<CompleteUser> = z.lazy(() =>
-  _userSchema.extend({
-    posts: postSchema.array(),
-  })
+export const userSchema: z.ZodSchema<CompleteUserOutput, z.ZodTypeDef, CompleteUserInput> = z.lazy(
+  () =>
+    _userSchema.extend({
+      posts: postSchema.array(),
+    })
 );

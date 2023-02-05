@@ -1,17 +1,31 @@
 import { z } from 'zod';
-import { CompleteSpreadsheet, RelatedSpreadsheetModel } from './index';
+import {
+  CompleteSpreadsheetInput,
+  CompleteSpreadsheetOutput,
+  RelatedSpreadsheetModel,
+} from './index';
 
 export const PresentationModel = z.object({
   id: z.string(),
   filename: z.string(),
   author: z.string(),
   contents: z.string().array(),
-  created: z.date(),
-  updated: z.date(),
+  created: z
+    .date()
+    .transform((v) => v.toISOString())
+    .pipe(z.string().datetime()),
+  updated: z
+    .date()
+    .transform((v) => v.toISOString())
+    .pipe(z.string().datetime()),
 });
 
-export interface CompletePresentation extends z.infer<typeof PresentationModel> {
-  spreadsheets: CompleteSpreadsheet[];
+export interface CompletePresentationInput extends z.input<typeof PresentationModel> {
+  spreadsheets: CompleteSpreadsheetInput[];
+}
+
+export interface CompletePresentationOutput extends z.infer<typeof PresentationModel> {
+  spreadsheets: CompleteSpreadsheetOutput[];
 }
 
 /**
@@ -19,7 +33,11 @@ export interface CompletePresentation extends z.infer<typeof PresentationModel> 
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedPresentationModel: z.ZodSchema<CompletePresentation> = z.lazy(() =>
+export const RelatedPresentationModel: z.ZodSchema<
+  CompletePresentationOutput,
+  z.ZodTypeDef,
+  CompletePresentationInput
+> = z.lazy(() =>
   PresentationModel.extend({
     spreadsheets: RelatedSpreadsheetModel.array(),
   })

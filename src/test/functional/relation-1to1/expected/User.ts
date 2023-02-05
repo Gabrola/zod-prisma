@@ -1,12 +1,16 @@
 import { z } from 'zod';
-import { CompleteKeychain, RelatedKeychainModel } from './index';
+import { CompleteKeychainInput, CompleteKeychainOutput, RelatedKeychainModel } from './index';
 
 export const UserModel = z.object({
   id: z.string(),
 });
 
-export interface CompleteUser extends z.infer<typeof UserModel> {
-  keychain?: CompleteKeychain | null;
+export interface CompleteUserInput extends z.input<typeof UserModel> {
+  keychain?: CompleteKeychainInput | null;
+}
+
+export interface CompleteUserOutput extends z.infer<typeof UserModel> {
+  keychain?: CompleteKeychainOutput | null;
 }
 
 /**
@@ -14,8 +18,9 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
-  UserModel.extend({
-    keychain: RelatedKeychainModel.nullish(),
-  })
-);
+export const RelatedUserModel: z.ZodSchema<CompleteUserOutput, z.ZodTypeDef, CompleteUserInput> =
+  z.lazy(() =>
+    UserModel.extend({
+      keychain: RelatedKeychainModel.nullish(),
+    })
+  );

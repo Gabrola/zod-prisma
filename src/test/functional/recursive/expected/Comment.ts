@@ -7,9 +7,14 @@ export const CommentModel = z.object({
   parentId: z.string(),
 });
 
-export interface CompleteComment extends z.infer<typeof CommentModel> {
-  parent: CompleteComment;
-  children: CompleteComment[];
+export interface CompleteCommentInput extends z.input<typeof CommentModel> {
+  parent: CompleteCommentInput;
+  children: CompleteCommentInput[];
+}
+
+export interface CompleteCommentOutput extends z.infer<typeof CommentModel> {
+  parent: CompleteCommentOutput;
+  children: CompleteCommentOutput[];
 }
 
 /**
@@ -17,7 +22,11 @@ export interface CompleteComment extends z.infer<typeof CommentModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedCommentModel: z.ZodSchema<CompleteComment> = z.lazy(() =>
+export const RelatedCommentModel: z.ZodSchema<
+  CompleteCommentOutput,
+  z.ZodTypeDef,
+  CompleteCommentInput
+> = z.lazy(() =>
   CommentModel.extend({
     parent: RelatedCommentModel,
     children: RelatedCommentModel.array(),

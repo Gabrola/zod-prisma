@@ -65,7 +65,13 @@ export const writeImportsForModel = (
         kind: StructureKind.ImportDeclaration,
         moduleSpecifier: './index',
         namedImports: Array.from(
-          new Set(filteredFields.flatMap((f) => [`Complete${f.type}`, relatedModelName(f.type)]))
+          new Set(
+            filteredFields.flatMap((f) => [
+              `Complete${f.type}Input`,
+              `Complete${f.type}Output`,
+              relatedModelName(f.type),
+            ])
+          )
         ),
       });
     }
@@ -164,13 +170,24 @@ export const generateRelatedSchemaForModel = (
   const relationFields = model.fields.filter((f) => f.kind === 'object');
 
   sourceFile.addInterface({
-    name: `Complete${model.name}`,
+    name: `Complete${model.name}Input`,
+    isExported: true,
+    extends: [`z.input<typeof ${modelName(model.name)}>`],
+    properties: relationFields.map((f) => ({
+      hasQuestionToken: !f.isRequired,
+      name: f.name,
+      type: `Complete${f.type}Input${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`,
+    })),
+  });
+
+  sourceFile.addInterface({
+    name: `Complete${model.name}Output`,
     isExported: true,
     extends: [`z.infer<typeof ${modelName(model.name)}>`],
     properties: relationFields.map((f) => ({
       hasQuestionToken: !f.isRequired,
       name: f.name,
-      type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`,
+      type: `Complete${f.type}Output${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`,
     })),
   });
 
@@ -196,7 +213,7 @@ export const generateRelatedSchemaForModel = (
     declarations: [
       {
         name: relatedModelName(model.name),
-        type: `z.ZodSchema<Complete${model.name}>`,
+        type: `z.ZodSchema<Complete${model.name}Output, z.ZodTypeDef, Complete${model.name}Input>`,
         initializer(writer) {
           writer
             .write(`z.lazy(() => ${modelName(model.name)}.extend(`)

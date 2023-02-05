@@ -7,6 +7,12 @@ export const DocumentModel = z.object({
   author: z.string(),
   contents: z.string(),
   size: imports.decimalSchema,
-  created: z.date(),
-  updated: z.date(),
+  created: z
+    .date()
+    .transform((v) => v.toISOString())
+    .pipe(z.string().datetime()),
+  updated: z
+    .date()
+    .transform((v) => v.toISOString())
+    .pipe(z.string().datetime()),
 });

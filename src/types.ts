@@ -21,7 +21,7 @@ export const getZodConstructor = (
         zodType = 'z.bigint()';
         break;
       case 'DateTime':
-        zodType = 'z.date()';
+        zodType = 'z.date().transform((v) => v.toISOString()).pipe(z.string().datetime())';
         break;
       case 'Float':
         zodType = 'z.number()';
