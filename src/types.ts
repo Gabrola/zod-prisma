@@ -2,13 +2,22 @@ import type { DMMF } from '@prisma/generator-helper';
 import { z } from 'zod';
 import { computeCustomSchema, computeModifiers } from './docs';
 import { configSchema } from './config';
+import { assertNever } from './util';
 
-export const getZodConstructor = (
-  field: DMMF.Field,
-  dateType: z.infer<typeof configSchema.shape.dateTimeSchema>,
+export const getZodConstructor = ({
+  field,
+  dateType,
+  nullableType,
   getRelatedModelName = (name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg) =>
-    name.toString()
-) => {
+    name.toString(),
+}: {
+  field: DMMF.Field;
+  dateType: z.infer<typeof configSchema.shape.dateTimeSchema>;
+  nullableType: 'nullable' | 'nullish';
+  getRelatedModelName?: (
+    name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg
+  ) => string;
+}) => {
   let zodType = 'z.unknown()';
   let extraModifiers: string[] = [''];
   if (field.kind === 'scalar') {
@@ -33,6 +42,9 @@ export const getZodConstructor = (
             break;
           case 'transform':
             zodType = 'z.date().transform((v) => v.toISOString()).pipe(z.string().datetime())';
+            break;
+          default:
+            assertNever(dateType);
             break;
         }
         break;
@@ -65,7 +77,19 @@ export const getZodConstructor = (
     zodType = computeCustomSchema(field.documentation) ?? zodType;
     extraModifiers.push(...computeModifiers(field.documentation));
   }
-  if (!field.isRequired && field.type !== 'Json') extraModifiers.push('nullish()');
+  if (!field.isRequired && field.type !== 'Json') {
+    switch (nullableType) {
+      case 'nullable':
+        extraModifiers.push('nullable()');
+        break;
+      case 'nullish':
+        extraModifiers.push('nullish()');
+        break;
+      default:
+        assertNever(nullableType);
+        break;
+    }
+  }
   // if (field.hasDefaultValue) extraModifiers.push('optional()')
 
   return `${zodType}${extraModifiers.join('.')}`;

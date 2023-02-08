@@ -41,3 +41,7 @@ export const dotSlash = (input: string) => {
 
   return './' + converted;
 };
+
+export const assertNever = (x: never): never => {
+  throw new Error(`Switch block is not exhaustive. Found: ${x}`);
+};

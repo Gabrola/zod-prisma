@@ -59,6 +59,7 @@ generatorHandler({
         {},
         { overwrite: true }
       );
+
       populateModelFile(model, sourceFile, config, prismaOptions);
 
       sourceFile.formatText({

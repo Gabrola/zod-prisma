@@ -147,7 +147,13 @@ export const generateSchemaForModel = (
                 .forEach((field) => {
                   writeArray(writer, getJSDocs(field.documentation));
                   writer
-                    .write(`${field.name}: ${getZodConstructor(field, config.dateTimeSchema)}`)
+                    .write(
+                      `${field.name}: ${getZodConstructor({
+                        field,
+                        dateType: config.dateTimeSchema,
+                        nullableType: config.nullableType,
+                      })}`
+                    )
                     .write(',')
                     .newLine();
                 });
@@ -223,11 +229,12 @@ export const generateRelatedSchemaForModel = (
 
                 writer
                   .write(
-                    `${field.name}: ${getZodConstructor(
+                    `${field.name}: ${getZodConstructor({
                       field,
-                      config.dateTimeSchema,
-                      relatedModelName
-                    )}`
+                      dateType: config.dateTimeSchema,
+                      nullableType: config.nullableType,
+                      getRelatedModelName: relatedModelName,
+                    })}`
                   )
                   .write(',')
                   .newLine();
@@ -276,8 +283,9 @@ export const populateModelFile = (
   writeImportsForModel(model, sourceFile, config, prismaOptions);
   writeTypeSpecificSchemas(model, sourceFile, config, prismaOptions);
   generateSchemaForModel(model, sourceFile, config, prismaOptions);
-  if (needsRelatedModel(model, config))
+  if (needsRelatedModel(model, config)) {
     generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions);
+  }
 };
 
 export const generateBarrelFile = (

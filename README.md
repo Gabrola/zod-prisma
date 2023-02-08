@@ -142,6 +142,10 @@ npm install -g pnpm
       // union     -  z.union([z.date(), z.string().datetime()])
       // transform -  z.date().transform((v) => v.toISOString()).pipe(z.string().datetime())
       dateTimeSchema           = "date" // (default) the type to use for DateTime fields
+    
+      // data returned from prisma queries are (type | null), however passing data to a query is nullish as they are optional
+      nullableType             = "nullish" // (default) use nullish (type | null | undefined) for optional fields
+      // nullableType             = "nullable" // use nullable (type | null) for optional fields 
     }
     ```
 

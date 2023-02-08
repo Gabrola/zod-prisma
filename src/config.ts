@@ -19,6 +19,7 @@ export const configSchema = z.object({
   trailingCommas: configBoolean.default('true'),
   ignoreRelationTypes: configBoolean.default('false').optional(),
   dateTimeSchema: z.enum(['date', 'union', 'transform']).default('date'),
+  nullableType: z.enum(['nullish', 'nullable']).default('nullish'),
 });
 
 export type Config = z.infer<typeof configSchema>;

@@ -18,9 +18,38 @@ describe('types Package', () => {
       documentation: ['@zod.max(64)', '@zod.min(1)'].join('\n'),
     };
 
-    const constructor = getZodConstructor(field, 'date');
+    const constructor = getZodConstructor({
+      field,
+      dateType: 'date',
+      nullableType: 'nullish',
+    });
 
     expect(constructor).toBe('z.string().array().max(64).min(1).nullish()');
+  });
+
+  test('getZodConstructor - nullable', () => {
+    const field: DMMF.Field = {
+      hasDefaultValue: false,
+      isGenerated: false,
+      isId: false,
+      isList: true,
+      isRequired: false,
+      isReadOnly: false,
+      isUpdatedAt: false,
+      isUnique: false,
+      kind: 'scalar',
+      name: 'nameList',
+      type: 'String',
+      documentation: ['@zod.max(64)', '@zod.min(1)'].join('\n'),
+    };
+
+    const constructor = getZodConstructor({
+      field,
+      dateType: 'date',
+      nullableType: 'nullable',
+    });
+
+    expect(constructor).toBe('z.string().array().max(64).min(1).nullable()');
   });
 
   test('regression - unknown type', () => {
@@ -38,7 +67,11 @@ describe('types Package', () => {
       type: 'SomeUnknownType',
     };
 
-    const constructor = getZodConstructor(field, 'date');
+    const constructor = getZodConstructor({
+      field,
+      dateType: 'date',
+      nullableType: 'nullish',
+    });
 
     expect(constructor).toBe('z.unknown()');
   });
