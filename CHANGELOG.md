@@ -1,5 +1,11 @@
 # @gabrola/zod-prisma
 
+## 0.11.0
+
+### Minor Changes
+
+- ccad789: Config option to use nullish or nullable for optional DB fields
+
 ## 0.10.0
 
 ### Minor Changes
