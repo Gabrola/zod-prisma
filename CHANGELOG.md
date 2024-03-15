@@ -1,5 +1,11 @@
 # @gabrola/zod-prisma
 
+## 0.11.1
+
+### Patch Changes
+
+- aeae0f8: Add Prisma v5 to peer dependencies
+
 ## 0.11.0
 
 ### Minor Changes
