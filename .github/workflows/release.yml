@@ -17,7 +17,7 @@ jobs:
         with:
           version: 9
 
-      - name: Use Node v18
+      - name: Use Node v20
         uses: actions/setup-node@v2
         with:
           node-version: 20
