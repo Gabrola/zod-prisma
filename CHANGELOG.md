@@ -1,5 +1,11 @@
 # @gabrola/zod-prisma
 
+## 0.12.0
+
+### Minor Changes
+
+- 5551666: Add option to add file extensions to imports of generated files
+
 ## 0.11.1
 
 ### Patch Changes
