@@ -20,6 +20,7 @@ export const configSchema = z.object({
   ignoreRelationTypes: configBoolean.default('false').optional(),
   dateTimeSchema: z.enum(['date', 'union', 'transform']).default('date'),
   nullableType: z.enum(['nullish', 'nullable']).default('nullish'),
+  relativeImportExtension: z.string().optional(),
 });
 
 export type Config = z.infer<typeof configSchema>;

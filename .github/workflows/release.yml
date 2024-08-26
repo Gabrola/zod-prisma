@@ -9,20 +9,18 @@ permissions: write-all
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      nx_affected: ${{ steps.set-nx-affected.outputs.nx_affected }}
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use pnpm v8
+      - name: Use pnpm v9
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
 
       - name: Use Node v18
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
           cache: 'pnpm'
 
       - name: Install dependencies

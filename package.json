@@ -34,10 +34,11 @@
   "scripts": {
     "build": "dts build --target node --format cjs --rollupTypes",
     "lint": "tsc --noEmit && dts lint src --ignore-pattern src/test/functional",
+    "lint:fix": "dts lint src --ignore-pattern src/test/functional --fix",
     "prepare": "husky install",
     "prepublish": "dts build --target node --format cjs --rollupTypes",
     "start": "dts watch",
-    "test": "dts test --maxWorkers=4 --verbose",
+    "test": "dts test --maxWorkers=4",
     "test:ci": "dts test --maxWorkers=2 --verbose --ci",
     "changeset:version": "changeset version",
     "changeset:publish": "pnpm run build && changeset publish"
@@ -104,5 +105,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "pnpm@9.8.0+sha512.8e4c3550fb500e808dbc30bb0ce4dd1eb614e30b1c55245f211591ec2cdf9c611cabd34e1364b42f564bd54b3945ed0f49d61d1bbf2ec9bd74b866fcdc723276"
 }

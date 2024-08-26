@@ -5,7 +5,7 @@ import { readFile } from 'fs-extra';
 import path from 'path';
 import { Project, QuoteKind } from 'ts-morph';
 import { SemicolonPreference } from 'typescript';
-import { configSchema, PrismaOptions } from '../../config';
+import { type Config, configSchema, PrismaOptions} from '../../config';
 import { generateBarrelFile, populateEnumFile, populateModelFile } from '../../generator';
 
 jest.setTimeout(60000);
@@ -33,7 +33,7 @@ const ftForDir = (dir: string) => async () => {
   });
 
   const generator = generators.find((generator) => generator.provider.value === 'zod-prisma')!;
-  const config = configSchema.parse(generator.config);
+  const config = configSchema.parse(generator.config) as Config;
 
   const prismaClient = generators.find(
     (generator) => generator.provider.value === 'prisma-client-js'
@@ -50,7 +50,7 @@ const ftForDir = (dir: string) => async () => {
 
   const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true });
 
-  generateBarrelFile(dmmf.datamodel.models, indexFile, config.enumFile);
+  generateBarrelFile(dmmf.datamodel.models, indexFile, config);
 
   indexFile.formatText({
     indentSize: 2,
@@ -145,6 +145,7 @@ describe('Functional Tests', () => {
   test.concurrent('JSON', ftForDir('json'));
   test.concurrent('Optional fields', ftForDir('optional'));
   test.concurrent('Config Import', ftForDir('config-import'));
+  test.concurrent('Config Import With Custom Extension', ftForDir('config-import-ext'));
 
   test.concurrent('Type Check Everything', async () => {
     const typeCheckResults = await execa(

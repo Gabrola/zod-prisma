@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgresql"
+  url      = ""
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider                = "zod-prisma"
+  output                  = "../actual/"
+  enumFile                = "enums"
+  imports                 = "./zod-utils"
+  relativeImportExtension = ".js"
+}
+
+enum Status {
+  draft
+  live
+  archived
+}
+
+model User {
+  id      String  @id @default(cuid())
+  name    String
+  email   String
+  posts   Post[]
+  balance Decimal /// @zod.custom(imports.decimalSchema)
+}
+
+model Post {
+  id       String  @id @default(cuid())
+  title    String
+  contents String
+  status   Status
+  tips     Decimal /// @zod.custom(imports.decimalSchema)
+  author   User    @relation(fields: [userId], references: [id])
+  userId   String
+}

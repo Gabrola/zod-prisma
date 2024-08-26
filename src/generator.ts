@@ -30,9 +30,9 @@ export const writeImportsForModel = (
     importList.push({
       kind: StructureKind.ImportDeclaration,
       namespaceImport: 'imports',
-      moduleSpecifier: dotSlash(
+      moduleSpecifier: `${dotSlash(
         path.relative(outputPath, path.resolve(path.dirname(schemaPath), config.imports))
-      ),
+      )}${config.relativeImportExtension ?? ''}`,
     });
   }
 
@@ -52,7 +52,9 @@ export const writeImportsForModel = (
     importList.push({
       kind: StructureKind.ImportDeclaration,
       isTypeOnly: enumFields.length === 0,
-      moduleSpecifier: dotSlash(config.enumFile || relativePath),
+      moduleSpecifier: `${dotSlash(config.enumFile || relativePath)}${
+        config.relativeImportExtension ?? ''
+      }`,
       namedImports: Array.from(new Set(enumFields.map((f) => f.type))),
     });
   }
@@ -63,7 +65,7 @@ export const writeImportsForModel = (
     if (filteredFields.length > 0) {
       importList.push({
         kind: StructureKind.ImportDeclaration,
-        moduleSpecifier: './index',
+        moduleSpecifier: `./index${config.relativeImportExtension ?? ''}`,
         namedImports: Array.from(
           new Set(
             filteredFields.flatMap((f) => [
@@ -288,20 +290,16 @@ export const populateModelFile = (
   }
 };
 
-export const generateBarrelFile = (
-  models: DMMF.Model[],
-  indexFile: SourceFile,
-  enumFile?: string | null
-) => {
+export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, config: Config) => {
   models.forEach((model) =>
     indexFile.addExportDeclaration({
-      moduleSpecifier: `./${model.name}`,
+      moduleSpecifier: `./${model.name}${config.relativeImportExtension ?? ''}`,
     })
   );
 
-  if (enumFile) {
+  if (config.enumFile) {
     indexFile.addExportDeclaration({
-      moduleSpecifier: `./${enumFile}`,
+      moduleSpecifier: `./${config.enumFile}${config.relativeImportExtension ?? ''}`,
     });
   }
 };

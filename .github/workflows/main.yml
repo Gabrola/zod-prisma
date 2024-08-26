@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node: ['16.x', '18.x']
+        node: ['18.x', '20.x', '22.x']
         os: [ubuntu-latest]
 
     steps:
@@ -21,10 +21,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Use pnpm v8
+      - name: Use pnpm v9
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
 
       - name: Use Node ${{ matrix.node }}
         uses: actions/setup-node@v2

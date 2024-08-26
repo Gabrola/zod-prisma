@@ -3,7 +3,7 @@ import { version } from '../package.json';
 
 import { generatorHandler } from '@prisma/generator-helper';
 import { Project, QuoteKind } from 'ts-morph';
-import { configSchema, PrismaOptions } from './config';
+import { Config, configSchema, PrismaOptions } from './config';
 import { generateBarrelFile, populateEnumFile, populateModelFile } from './generator';
 
 generatorHandler({
@@ -29,7 +29,7 @@ generatorHandler({
         'Incorrect config provided. Please check the values you provided and try again.'
       );
 
-    const config = results.data;
+    const config = results.data as Config;
     const prismaOptions: PrismaOptions = {
       clientPath,
       outputPath,
@@ -45,7 +45,7 @@ generatorHandler({
 
     const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true });
 
-    generateBarrelFile(models, indexFile, config.enumFile);
+    generateBarrelFile(models, indexFile, config);
 
     indexFile.formatText({
       indentSize: config.indentSize,
