@@ -104,11 +104,11 @@ npm install -g pnpm
 
     ```sh
     #npm
-    npm install -D zod-prisma
+    npm install -D @gabrola/zod-prisma
     #yarn
-    yarn add -D zod-prisma
+    yarn add -D @gabrola/zod-prisma
     #pnpm
-    pnpm add -D zod-prisma
+    pnpm add -D @gabrola/zod-prisma
     ```
 
 3.  Add the zod-prisma generator to your schema.prisma
